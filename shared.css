@@ -1,0 +1,1288 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Design Language: Catppuccin Mocha + Glassmorphism + No Overlaps
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Catppuccin Mocha Palette */
+  --ctp-base: #1e1e2e;
+  --ctp-mantle: #181825;
+  --ctp-crust: #11111b;
+  --ctp-surface0: #313244;
+  --ctp-surface1: #45475a;
+  --ctp-surface2: #585b70;
+  --ctp-overlay0: #6c7086;
+  --ctp-overlay1: #7f849c;
+  --ctp-overlay2: #9399b2;
+  --ctp-text: #cdd6f4;
+  --ctp-subtext0: #a6adc8;
+  --ctp-subtext1: #bac2de;
+  --ctp-lavender: #b4befe;
+  --ctp-blue: #89b4fa;
+  --ctp-sapphire: #74c7ec;
+  --ctp-sky: #89dceb;
+  --ctp-teal: #94e2d5;
+  --ctp-green: #a6e3a1;
+  --ctp-yellow: #f9e2af;
+  --ctp-peach: #fab387;
+  --ctp-maroon: #eba0ac;
+  --ctp-red: #f38ba8;
+  --ctp-mauve: #cba6f7;
+  --ctp-pink: #f5c2e7;
+  --ctp-flamingo: #f2cdcd;
+  --ctp-rosewater: #f5e0dc;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(30, 30, 46, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-blur: 12px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.6);
+
+  /* Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE & LAYOUT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+* {
+  box-sizing: border-box;
+}
+
+/* 👇 THE FIX: Kill the white flash and upgrade keyboard scrolling */
+html {
+  background-color: var(--ctp-base); /* 1. Paints the void behind the body dark */
+  color-scheme: dark;                /* 2. Forces Chrome's native renderer into dark mode */
+  scroll-behavior: smooth;           /* 3. Makes Home/End keys glide smoothly instead of snapping */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+               Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  background: linear-gradient(135deg, var(--ctp-base) 0%, var(--ctp-mantle) 100%);
+  color: var(--ctp-text);
+  margin: 0;
+  padding: 10px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.popup {
+  width: 380px;
+}
+
+body.sidepanel {
+  width: 100%;
+  min-height: 100vh;
+  padding: 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPACT HEADER WITH INLINE IMAGE COUNT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  box-shadow: var(--shadow-sm);
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff; /* 👇 THE FIX: Pure white text for maximum readability */
+  /* 👇 Strong neon purple glow layered over a dark shadow for depth */
+  text-shadow: 0 0 12px rgba(203, 166, 247, 0.9), 0 2px 4px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.5px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* Inline Image Count - Compact Badge */
+#imageCount {
+  font-size: 10px;
+  background: var(--ctp-blue); /* Solid bright blue instead of dull grey */
+  color: var(--ctp-crust); /* Deep dark text for maximum readability */
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(137, 180, 250, 0.4); /* Matching blue glow */
+  text-shadow: none; /* Prevents inheriting the purple glow from the h3 */
+}
+
+.sp-hint {
+  font-size: 11px; /* Increased visibility */
+  color: var(--ctp-text); /* Brighter white/blue text */
+  background: rgba(137, 180, 250, 0.15); /* Slightly stronger blue tint */
+  border-left: 3px solid var(--ctp-blue); /* Thicker accent line */
+  border-radius: 6px;
+  padding: 7px 10px;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  font-weight: 500; /* Makes the text slightly bolder */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ULTRA-COMPACT STATS BAR (Horizontal Lock)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.stats-bar {
+  display: none;
+  flex-direction: row !important; /* Force horizontal layout */
+  flex-wrap: nowrap; /* Prevent elements from stacking on new lines */
+  justify-content: space-evenly; /* Space the three items perfectly */
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+  padding: 6px 10px;
+  background: rgba(30, 30, 46, 0.6);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+}
+
+.stats-bar.visible {
+  display: flex !important;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  font-size: 9px; /* Slightly larger labels */
+  color: var(--ctp-subtext1); /* Brighter label text */
+  font-weight: 500;
+}
+
+.stat strong {
+  display: block;
+  font-size: 13px; /* Emphasize the numbers */
+  font-weight: 700;
+  color: var(--ctp-mauve);
+  margin-bottom: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUTTONS - ENHANCED PREMIUM STYLE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+button {
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+  outline: none;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
+.icon-btn {
+  background: var(--ctp-surface0);
+  color: var(--ctp-subtext1);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.icon-btn:hover {
+  background: var(--ctp-surface1);
+  color: var(--ctp-text);
+  border-color: var(--ctp-blue);
+}
+
+#sniffBtn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--ctp-mauve) 0%, var(--ctp-blue) 100%);
+  color: var(--ctp-crust);
+  padding: 9px;
+  font-size: 13px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 8px;
+}
+
+#sniffBtn:hover:not(:disabled) {
+  box-shadow: 0 4px 16px rgba(203, 166, 247, 0.4);
+}
+
+.action-btn {
+  background: var(--ctp-surface0);
+  color: var(--ctp-subtext1);
+  padding: 5px 9px;
+  font-size: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  background: var(--ctp-surface1);
+  color: var(--ctp-text);
+  border-color: var(--ctp-blue);
+}
+
+.action-btn.active {
+  background: var(--ctp-blue);
+  color: var(--ctp-crust);
+  border-color: var(--ctp-blue);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FLOATING ACTION BUTTONS (Download & Copy)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#downloadSelectedBtn,
+#copySelectedBtn {
+  display: none;
+  position: fixed;
+  bottom: 16px;
+  z-index: 1000;
+  padding: 10px 18px;
+  font-size: 12px;
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+
+  /* 👇 THE FIX 1: Add a buttery-smooth physics transition */
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+#downloadSelectedBtn {
+  right: 16px;
+  background: var(--ctp-green);
+  color: var(--ctp-crust);
+  border: 1px solid transparent;
+}
+
+/* 👇 THE FIX 2: Premium tactile hover AND focus for the Download Button */
+#downloadSelectedBtn:hover,
+#downloadSelectedBtn:focus-visible {
+  background: var(--ctp-teal); /* Shifts to a brighter mint color */
+  transform: translateY(-3px) scale(1.02) !important; /* Lifts off the screen */
+  box-shadow: 0 8px 20px rgba(166, 227, 161, 0.4); /* Casts a green glow */
+  outline: 3px solid var(--ctp-teal) !important;
+  outline-offset: 2px;
+}
+#downloadSelectedBtn:active {
+  transform: translateY(1px) scale(0.98) !important; /* Physically depresses when clicked */
+}
+
+#copySelectedBtn {
+  left: 16px;
+  background: rgba(35, 35, 52, 0.95);
+  color: var(--ctp-blue);
+  border: 1px solid var(--ctp-surface1);
+}
+
+/* 👇 THE FIX 3: Premium tactile hover AND focus for the Copy Button */
+#copySelectedBtn:hover,
+#copySelectedBtn:focus-visible {
+  background: var(--ctp-surface0);
+  border-color: var(--ctp-blue);
+  color: var(--ctp-text);
+  transform: translateY(-3px) scale(1.02) !important; /* Lifts off the screen */
+  box-shadow: 0 8px 20px rgba(137, 180, 250, 0.3); /* Casts a blue glow */
+  outline: 3px solid var(--ctp-blue) !important;
+  outline-offset: 2px;
+}
+#copySelectedBtn:active {
+  transform: translateY(1px) scale(0.98) !important; /* Physically depresses when clicked */
+}
+
+/* Show when selection exists */
+body.has-selection #downloadSelectedBtn,
+body.has-selection #copySelectedBtn {
+  display: block;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#loadMoreBtn {
+  width: 100%;
+  background: var(--ctp-surface0);
+  color: var(--ctp-text);
+  padding: 8px;
+  margin-top: 12px;
+  border-radius: 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SETTINGS & INPUTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-bottom: 8px;
+  color: var(--ctp-subtext1);
+}
+
+.settings-row input[type="checkbox"] {
+  accent-color: var(--ctp-blue);
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+}
+
+.settings-row label {
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+
+.advanced-panel {
+  display: none;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--ctp-surface1);
+  margin-bottom: 8px;
+}
+
+.advanced-panel.open {
+  display: block;
+}
+
+input[type="text"] {
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface1);
+  color: var(--ctp-text);
+  padding: 7px 9px;
+  font-size: 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--ctp-blue);
+  box-shadow: 0 0 0 3px rgba(137, 180, 250, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREMIUM SELECT DROPDOWNS - FULL TEXT LABELS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+select.action-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--ctp-surface0);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23bac2de'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 6px) center;
+  padding: 5px 20px 5px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--ctp-surface1);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+  min-width: 90px;
+}
+
+select.action-btn:hover {
+  border-color: var(--ctp-blue);
+  background-color: var(--ctp-surface1);
+}
+
+select.action-btn:focus {
+  outline: none;
+  border-color: var(--ctp-blue);
+  box-shadow: 0 0 0 2px rgba(137, 180, 250, 0.15);
+}
+
+/* Dropdown Options Styling */
+select.action-btn option {
+  background: var(--ctp-surface0);
+  color: var(--ctp-text);
+  padding: 6px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATUS & PROGRESS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#status {
+  font-size: 11px;
+  color: var(--ctp-subtext0);
+  margin-bottom: 6px;
+  text-align: center;
+  font-weight: 500;
+}
+
+progress {
+  width: 100%;
+  height: 4px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  display: none;
+}
+
+progress::-webkit-progress-bar {
+  background-color: var(--ctp-surface0);
+  border-radius: 10px;
+}
+
+progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--ctp-green) 0%, var(--ctp-teal) 100%);
+  border-radius: 10px;
+}
+
+progress::-moz-progress-bar {
+  background: linear-gradient(90deg, var(--ctp-green) 0%, var(--ctp-teal) 100%);
+  border-radius: 10px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILTER PILLS - PREMIUM STYLE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.filter-group {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ctp-surface1);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ctp-surface1) transparent;
+}
+
+.filter-group::-webkit-scrollbar {
+  height: 3px;
+}
+
+.filter-group::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-group::-webkit-scrollbar-thumb {
+  background: var(--ctp-surface1);
+  border-radius: 3px;
+}
+
+.filter-btn {
+  background: var(--ctp-surface0);
+  color: var(--ctp-subtext1);
+  padding: 5px 12px;
+  font-size: 10px;
+  border-radius: 14px;
+  border: 1px solid var(--ctp-surface1);
+  cursor: pointer;
+  flex-shrink: 0;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.filter-btn:hover {
+  background: var(--ctp-surface1);
+  color: var(--ctp-text);
+  transform: translateY(-1px);
+}
+
+.filter-btn.active {
+  background: var(--ctp-blue);
+  color: var(--ctp-crust);
+  border-color: var(--ctp-blue);
+  box-shadow: 0 0 8px rgba(137, 180, 250, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SELECTION TOOLS - IN-FLOW CONTROL PANEL (NO OVERLAP)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#selectionTools {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0 12px 0;
+  padding: 10px;
+  background: rgba(30, 30, 46, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 8px;
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.tool-group label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ctp-subtext1);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.tool-group label input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--ctp-blue);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MASONRY GRID - NO OVERLAP WITH CONTROLS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#results {
+  margin-top: 8px;
+  margin-bottom: 70px; /* Space for floating buttons */
+
+  /* 👇 THE FIX 1: CSS Grid instantly forces Left-to-Right chronological flow */
+  display: grid;
+  gap: 8px;
+
+  /* Default 2 columns for the narrow Popup */
+  grid-template-columns: repeat(2, 1fr);
+
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Forcefully strip the blue selection color if Chrome disobeys */
+#results::selection,
+#results *::selection {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* 👇 THE FIX 2: Responsive Columns */
+body.sidepanel #results {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (min-width: 500px) {
+  body.sidepanel #results {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.img-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--ctp-crust);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  width: 100%;
+
+  /* 👇 THE FIX 3: Force uniform squares so the rows align perfectly */
+  aspect-ratio: 1 / 1;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.img-item::selection,
+.img-item *::selection {
+  background: transparent;
+  color: inherit;
+}
+
+.img-item:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+  z-index: 10;
+}
+
+.img-item img {
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  /* 👇 THE FIX 4: Center-crops the thumbnail safely without stretching it */
+  object-fit: cover;
+
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-user-drag: auto !important;
+}
+
+.img-select {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 20;
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  accent-color: var(--ctp-blue);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREMIUM BADGES - SOLID HIGH-CONTRAST VERSION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.res-badge {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  padding: 3px 10px;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 15;
+  /* UX FIX: Solid dark background for maximum readability */
+  background: #11111b;
+  color: #cdd6f4;
+  border: 1px solid #45475a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.res-badge.badge-hires {
+  /* Solid Electric Blue for HD+ */
+  background: #89b4fa;
+  color: #11111b; /* High contrast dark text */
+  border: none;
+  box-shadow: 0 0 10px rgba(137, 180, 250, 0.4);
+}
+
+.res-badge.badge-link {
+  /* Solid Peach for "Raw Discovery" links */
+  background: #fab387;
+  color: #11111b;
+  border: 2px dashed #11111b;
+}
+
+.img-item.item-link {
+  border: 2px dashed var(--ctp-surface1);
+  background: var(--ctp-mantle);
+}
+
+.type-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 7px;
+  font-weight: 800;
+  padding: 3px 6px;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 15;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+}
+
+.type-gif {
+  background: rgba(203, 166, 247, 0.92);
+  color: var(--ctp-crust);
+}
+
+.type-video-gif {
+  background: rgba(137, 180, 250, 0.92);
+  color: var(--ctp-crust);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SKELETON SHIMMER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.shimmer-placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--ctp-surface0) 25%,
+    var(--ctp-surface1) 50%,
+    var(--ctp-surface0) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREVIEW MODAL
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#previewModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 17, 27, 0.92);
+  backdrop-filter: blur(16px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#modalImg {
+  max-width: 92%;
+  max-height: 85%;
+  border-radius: 12px;
+  box-shadow: var(--shadow-xl);
+  object-fit: contain;
+  background: var(--ctp-base);
+}
+
+.modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(49, 50, 68, 0.7);
+  backdrop-filter: blur(8px);
+  color: var(--ctp-text);
+  border: 1px solid var(--glass-border);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  z-index: 1001;
+}
+
+.modal-nav:hover {
+  background: var(--ctp-mauve);
+  color: var(--ctp-crust);
+  transform: translateY(-50%) scale(1.1);
+}
+
+#modalPrev { left: 16px; }
+#modalNext { right: 16px; }
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(243, 139, 168, 0.25);
+  backdrop-filter: blur(8px);
+  color: var(--ctp-red);
+  border: 1px solid rgba(243, 139, 168, 0.4);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: var(--ctp-red);
+  color: var(--ctp-crust);
+  transform: rotate(90deg);
+}
+
+.modal-action {
+  position: absolute;
+  top: 16px;
+  right: 64px; /* Positions it just to the left of the close button */
+  background: rgba(137, 180, 250, 0.25); /* Subtle Catppuccin Blue */
+  backdrop-filter: blur(8px);
+  color: var(--ctp-blue);
+  border: 1px solid rgba(137, 180, 250, 0.4);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.modal-action:hover {
+  background: var(--ctp-blue);
+  color: var(--ctp-crust);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(137, 180, 250, 0.4);
+}
+
+#modalResBadge {
+  position: absolute;
+  bottom: 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--ctp-text);
+  border: 1px solid var(--glass-border);
+  padding: 7px 16px;
+  border-radius: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 1001;
+  box-shadow: var(--shadow-md);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOAST NOTIFICATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#toastContainer {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10000;
+  pointer-events: none;
+  max-width: calc(100% - 24px);
+}
+
+.toast {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--ctp-text);
+  padding: 9px 15px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  border-left: 3px solid var(--ctp-blue);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  pointer-events: auto;
+}
+
+.toast-success { border-left-color: var(--ctp-green); }
+.toast-error { border-left-color: var(--ctp-red); }
+.toast-info { border-left-color: var(--ctp-blue); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY (Targeted Glow Engine)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Global Blue Outline for UI controls AND standard checkboxes (ZIP, Master All) */
+button:focus-visible,
+input[type="text"]:focus-visible,
+select:focus-visible,
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--ctp-blue) !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+
+/* 👇 2. Glowing White Outline SPECIFICALLY for Image Checkboxes */
+input[type="checkbox"].img-select:focus-visible {
+  outline: 2px solid #ffffff !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8) !important; /* Adds the neon glow */
+}
+
+/* 👇 3. Crisp White Outline for the Images */
+.img-item img:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: -3px !important; /* Keeps the outline neatly inside the image */
+  border-radius: 8px;
+}
+
+/* 4. A gentle white halo behind the card when focused */
+.img-item:focus-within {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+  z-index: 10;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DISCLAIMER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.disclaimer {
+  font-size: 10px; /* Increased from microscopic 8px */
+  color: var(--ctp-subtext0); /* Brighter text color so it's actually readable */
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 70px;
+  line-height: 1.4;
+  opacity: 1; /* Removed the 0.7 fade effect completely */
+  font-weight: 500; /* Makes the text slightly crisper */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.hidden { display: none !important; }
+.visible { display: block !important; }
+
+.empty-hint {
+  text-align: center;
+  color: var(--ctp-overlay0);
+  font-size: 11px;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR STYLING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ctp-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ctp-surface1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ctp-surface2);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ctp-surface1) var(--ctp-base);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE OPTIMIZATIONS FOR SIDE PANEL
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body.sidepanel .header {
+  padding: 5px 9px;
+  margin-bottom: 5px;
+}
+
+body.sidepanel .sp-hint {
+  font-size: 10px;
+  padding: 4px 7px;
+  margin-bottom: 5px;
+}
+
+body.sidepanel #sniffBtn {
+  padding: 7px;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+body.sidepanel .filter-group {
+  margin-top: 5px;
+  padding-bottom: 5px;
+}
+
+#scrollTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  background: var(--ctp-surface1);
+  color: var(--ctp-text);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--ctp-surface2);
+  box-shadow: var(--shadow-lg);
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 9999; /* Super high so it stays above the floating toolbar */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#scrollTopBtn:hover {
+  background: var(--ctp-surface2);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODAL STATE MANAGEMENT (Premium Scroll Lock)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Locks the background from scrolling */
+body.modal-open {
+  overflow: hidden !important;
+}
+
+/* 2. Automatically hides ANY floating action buttons so they don't bleed through */
+body.modal-open #scrollTopBtn,
+body.modal-open #downloadSelectedBtn,
+body.modal-open #copySelectedBtn {
+  display: none !important;
+}
+
+/* 3. Ensure the modal crushes everything else */
+#previewModal {
+  z-index: 99999;
+}
+.modal-nav, #modalResBadge {
+  z-index: 100000;
+}
+
+/* Universal High-Contrast Header Buttons */
+#openStats, #openSidePanel, .header-btn {
+  color: #cdd6f4 !important; /* Catppuccin high-contrast white */
+  background: rgba(255, 255, 255, 0.1) !important; /* Visible glassy box */
+  border: 1px solid rgba(255, 255, 255, 0.15) !important; /* Crisp edge definition */
+  opacity: 1 !important; /* Prevent Chrome from dimming them */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Lift off the dark background */
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+/* Hover state so they feel responsive */
+#openStats:hover, #openSidePanel:hover, .header-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* Pure Sky Blue Paw Silhouette (No Glow) */
+.brand-paw {
+  font-size: 1.3em;
+  color: transparent; /* Hides the ugly native OS emoji colors */
+  text-shadow: 0 0 0 var(--ctp-sky); /* Projects a perfectly flat, Sky Blue silhouette */
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.header h3:hover .brand-paw {
+  transform: scale(1.25) rotate(-15deg);
+}
+
+/* 👇 THE FIX: Premium Pulsing Side Panel Button */
+.premium-panel-btn {
+  background: linear-gradient(135deg, rgba(137, 180, 250, 0.15) 0%, rgba(203, 166, 247, 0.15) 100%) !important;
+  color: var(--ctp-blue) !important;
+  border: 1px solid rgba(137, 180, 250, 0.4) !important;
+  padding: 4px 12px !important;
+  border-radius: 8px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px;
+  animation: subtlePulse 2.5s infinite;
+}
+
+.premium-panel-btn:hover {
+  background: linear-gradient(135deg, rgba(137, 180, 250, 0.3) 0%, rgba(203, 166, 247, 0.3) 100%) !important;
+  color: #ffffff !important;
+  border-color: var(--ctp-mauve) !important;
+  box-shadow: 0 0 12px rgba(137, 180, 250, 0.4);
+  animation: none; /* Stops pulsing when they hover over it */
+}
+
+/* Draws the user's eye to the feature without being overwhelming */
+@keyframes subtlePulse {
+  0% { box-shadow: 0 0 0 0 rgba(137, 180, 250, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(137, 180, 250, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(137, 180, 250, 0); }
+}
+
+/* 👇 THE FIX: Premium ZIP Toggle Switch */
+.premium-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The invisible wrapper */
+.premium-toggle {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+}
+
+/* Hide the default HTML checkbox entirely */
+.premium-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The Pill Background */
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--ctp-surface1); /* Dark grey when off */
+  border: 1px solid var(--ctp-surface2);
+  transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* Buttery physics */
+  border-radius: 20px;
+}
+
+/* The Circle inside the Pill */
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--ctp-text);
+  transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 50%;
+}
+
+/* What happens when it is ON (Checked) */
+.premium-toggle input:checked + .toggle-slider {
+  background: linear-gradient(135deg, var(--ctp-mauve) 0%, var(--ctp-blue) 100%);
+  border-color: transparent;
+  box-shadow: 0 0 10px rgba(203, 166, 247, 0.5); /* Emits a purple glow */
+}
+
+/* Moves the circle to the right when ON */
+.premium-toggle input:checked + .toggle-slider:before {
+  transform: translateX(16px);
+  background-color: var(--ctp-crust); /* Makes the circle dark against the bright gradient */
+}
+
+/* Keyboard Accessibility - Keep the glowing focus ring! */
+.premium-toggle input:focus-visible + .toggle-slider {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* The Text Label next to the switch */
+.toggle-label {
+  cursor: pointer;
+  font-weight: 700 !important;
+  color: var(--ctp-subtext1);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+/* Make the text glow slightly when the switch is ON */
+.premium-toggle input:checked ~ .toggle-label,
+.premium-toggle-wrapper:has(input:checked) .toggle-label {
+  color: var(--ctp-text);
+  text-shadow: 0 0 8px rgba(203, 166, 247, 0.3);
+}
+
+/* Premium Thumbnail Size Slider */
+.premium-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--ctp-surface0);
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid var(--ctp-surface1);
+  transition: background 0.2s;
+}
+
+/* The Draggable Handle */
+.premium-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ctp-mauve) 0%, var(--ctp-blue) 100%);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(203, 166, 247, 0.4);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+}
+
+/* Glow when hovered/dragged */
+.premium-slider::-webkit-slider-thumb:hover,
+.premium-slider:focus-visible::-webkit-slider-thumb {
+  transform: scale(1.3);
+  box-shadow: 0 0 14px rgba(137, 180, 250, 0.8);
+}
+

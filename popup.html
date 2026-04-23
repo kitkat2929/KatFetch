@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body class="popup">
+
+  <div class="header">
+    <h3><span class="brand-paw">🐾</span> KatFetch <span id="imageCount"></span></h3>
+    <div class="header-actions">
+      <button class="icon-btn premium-panel-btn" id="openSidePanel" title="Open Side Panel">◨ Dock</button>
+      <button class="icon-btn" id="openStats">📊</button>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat"><strong id="statDl">0</strong>Downloaded</div>
+    <div class="stat"><strong id="statFail">0</strong>Failed</div>
+    <div class="stat"><strong id="statZip">0</strong>ZIPs</div>
+  </div>
+
+  <div id="tab-images">
+    <div class="settings-row" style="justify-content: space-between;">
+      <div class="premium-toggle-wrapper">
+        <label class="premium-toggle" title="Package as ZIP">
+          <input type="checkbox" id="zipToggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+        <label for="zipToggle" class="toggle-label">📦 Package as ZIP</label>
+      </div>
+      <button id="toggleAdvancedBtn" class="action-btn">⚙️ Advanced</button>
+    </div>
+
+    <div id="advancedSettings" class="advanced-panel">
+      <div style="margin-bottom: 14px; display:flex; flex-direction:column; gap:6px; align-items:stretch;">
+        <label for="filenameTemplate" style="color:#a6adc8; font-size:11px; font-weight:600;">Custom Naming Rule:</label>
+        <div style="position:relative; width:100%; background:#181825; border:1px solid #45475a; border-radius:4px; overflow:hidden;">
+          <input type="text" id="filenameTemplate" value="" style="background:transparent; border:none; color:#cdd6f4; padding:7px 36px 7px 8px; font-size:11px; width:100%; box-sizing:border-box; outline:none;" title="Variables: {domain}, {index}, {date}, {time}, {ext}">
+          <button id="resetNameBtn" style="position:absolute; right:0; top:0; bottom:0; width:32px; background:#cba6f7; border:none; color:#11111b; cursor:pointer; font-size:16px; font-weight:900; display:flex; align-items:center; justify-content:center;" title="Reset to Auto Domain">↺</button>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:6px; align-items:stretch;">
+        <label for="searchInput" style="color:#a6adc8; font-size:11px; font-weight:600;">Smart URL Filter:</label>
+        <input type="text" id="searchInput" placeholder="Search URLs (Regex supported) 🐾" autocomplete="off" spellcheck="false" style="width: 100%; padding: 7px 8px; background: #181825; border: 1px solid #45475a; color: #cdd6f4; border-radius: 4px; font-size: 11px; box-sizing: border-box; outline: none;">
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:6px; align-items:stretch; margin-top: 14px;">
+        <label for="gridSizeSlider" style="color:#a6adc8; font-size:11px; font-weight:600; display:flex; justify-content:space-between;">
+          <span>🖼️ Thumbnail Size:</span>
+          <span id="gridSizeLabel" style="color:#cba6f7;">Medium</span>
+        </label>
+        <input type="range" id="gridSizeSlider" min="1" max="5" value="3" class="premium-slider" title="Adjust grid density">
+      </div>
+    </div>
+
+    <div id="status" aria-live="polite" aria-atomic="true">Ready to fetch...</div>
+    <progress id="dlProgress" value="0" max="100" style="display:none;"></progress>
+    <button id="sniffBtn">🔍 Fetch Images</button>
+
+    <div id="filterGroup" class="filter-group" style="display:none;">
+      <button class="filter-btn active" data-ext="all" aria-pressed="true">ALL</button>
+      <button class="filter-btn" data-ext="png">PNG</button>
+      <button class="filter-btn" data-ext="jpg">JPG</button>
+      <button class="filter-btn" data-ext="webp">WEBP</button>
+      <button class="filter-btn" data-ext="gif">GIF</button>
+      <button class="filter-btn" data-ext="svg">SVG</button>
+      <button class="filter-btn" data-ext="avif">AVIF</button>
+      <button class="filter-btn" data-ext="bmp">BMP</button>
+      <button class="filter-btn" data-ext="ico">ICO</button>
+    </div>
+
+    <div id="selectionTools" style="display:none;">
+      <div class="tool-group" style="gap:6px;">
+        <label style="display:flex; align-items:center; gap:4px; cursor:pointer; font-weight:bold; color:#bac2de; font-size:10px;">
+          <input type="checkbox" id="masterSelect" aria-label="Select all images in view"> All
+        </label>
+
+        <select id="sizeFilter" class="action-btn">
+          <option value="all">All Sizes</option>
+          <option value="hd">HD+ Only</option>
+          <option value="sd">Standard</option>
+          <option value="lq">Low Quality</option>
+          <option value="link">Links Only</option>
+        </select>
+
+        <select id="orientationFilter" class="action-btn" title="Orientation">
+          <option value="all">All Shapes</option>
+          <option value="landscape">Landscape</option>
+          <option value="portrait">Portrait</option>
+          <option value="square">Square</option>
+        </select>
+      </div>
+
+      <div class="tool-group">
+        <button id="sortBtn" class="action-btn">Sort</button>
+        <button id="bestBtn" class="action-btn">Best</button>
+        <button id="invertBtn" class="action-btn">Invert</button>
+      </div>
+    </div>
+
+    <div id="results"></div>
+    <button id="loadMoreBtn" style="display:none;" tabindex="-1">Load More</button>
+  </div>
+
+  <!-- Floating Action Buttons (shown via JavaScript) -->
+  <button id="copySelectedBtn" style="display:none;">📋 Copy</button>
+  <button id="downloadSelectedBtn" style="display:none;">Download Selected</button>
+
+  <div id="previewModal" role="dialog" aria-modal="true" aria-labelledby="modalResBadge">
+    <button id="modalPrev" class="modal-nav" aria-label="Previous Image">&#8249;</button>
+    <img id="modalImg" src="" alt="Full resolution preview">
+    <div id="modalResBadge">Loading...</div>
+    <button id="modalEnlarge" class="modal-action" aria-label="Open Full Size" title="Open full size in new tab">⛶</button>
+    <button id="modalNext" class="modal-nav" aria-label="Next Image">&#8250;</button>
+    <button id="modalClose" class="modal-close" aria-label="Close Preview">&times;</button>
+  </div>
+
+  <p class="disclaimer">Only download images you have the right to use.<br>Respect copyright &amp; site terms of service.</p>
+
+  <div id="toastContainer"></div>
+
+  <script src="shared.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

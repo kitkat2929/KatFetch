@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "KatFetch — Image & GIF Downloader",
+  "short_name": "KatFetch",
+  "version": "1.0",
+  "description": "Fetch, preview and bulk-download images & GIFs from any webpage.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "downloads",
+    "contextMenus",
+    "storage",
+    "sidePanel",
+    "offscreen",
+    "webRequest",
+    "notifications"
+  ],
+
+  "host_permissions": ["<all_urls>"],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["observer.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+
+  "icons": {
+    "16":  "icons/logo_16.png",
+    "32":  "icons/logo_32.png",
+    "48":  "icons/logo_48.png",
+    "128": "icons/logo_128.png"
+  },
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16":  "icons/logo_16.png",
+      "32":  "icons/logo_32.png",
+      "48":  "icons/logo_48.png",
+      "128": "icons/logo_128.png"
+    }
+  },
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src * data: blob:;"
+  }
+}
