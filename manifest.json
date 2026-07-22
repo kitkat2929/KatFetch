@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "KatFetch — Image & GIF Downloader",
   "short_name": "KatFetch",
-  "version": "1.0",
-  "description": "Fetch, preview and bulk-download images & GIFs from any webpage.",
+  "version": "1.0.1",
+  "description": "Download images and GIFs from webpages in bulk. Preview, filter, and save files locally as a ZIP",
   "permissions": [
     "activeTab",
     "scripting",
