@@ -2,7 +2,7 @@
 
 > Bulk image & GIF downloader with smart filtering, ZIP packing, and a persistent side panel. Built with vanilla JS + Chrome MV3.
 
-![Version](https://img.shields.io/badge/version-1.0-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/badge/license-MIT-purple)
+![Version](https://img.shields.io/badge/version-1.0.1-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/badge/license-MIT-purple)
 
 ---
 
